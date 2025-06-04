@@ -10,7 +10,7 @@ To launch the Flask webapp locally:
 python -m laptimeanalyzer.webapp
 ```
 
-This will start a development server on <http://localhost:5000> where you can upload lap time CSV files and explore interactive graphs.
+This will start a development server on <http://localhost:5000> where you can select a season and circuit to fetch lap times from the Ergast API. The dashboard lets you compare two drivers lap by lap to see who was quicker on each lap.
 
 ## Deployment Notes
 

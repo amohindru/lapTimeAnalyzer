@@ -2,38 +2,28 @@
 <html>
 <head>
     <title>Lap Time Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Lap Time Dashboard</h1>
+    <p>Year: {{ year }}, Circuit: {{ circuit_name }}</p>
     <form method="get">
-        Driver:
-        <select name="driver">
-            <option value="">All</option>
+        Driver 1:
+        <select name="driver1">
             {% for d in drivers %}
-            <option value="{{ d }}" {% if d == selected_driver %}selected{% endif %}>{{ d }}</option>
+            <option value="{{ d }}" {% if d == selected_driver1 %}selected{% endif %}>{{ d }}</option>
             {% endfor %}
         </select>
-        Team:
-        <select name="team">
-            <option value="">All</option>
-            {% for t in teams %}
-            <option value="{{ t }}" {% if t == selected_team %}selected{% endif %}>{{ t }}</option>
+        Driver 2:
+        <select name="driver2">
+            {% for d in drivers %}
+            <option value="{{ d }}" {% if d == selected_driver2 %}selected{% endif %}>{{ d }}</option>
             {% endfor %}
         </select>
-        Track:
-        <select name="track">
-            <option value="">All</option>
-            {% for tr in tracks %}
-            <option value="{{ tr }}" {% if tr == selected_track %}selected{% endif %}>{{ tr }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Filter">
+        <input type="submit" value="Compare">
     </form>
-    <div>
-        {{ time_graph|safe }}
-    </div>
-    <div>
-        {{ delta_graph|safe }}
+    <div class="graph">
+        {{ compare_graph|safe }}
     </div>
 </body>
 </html>
