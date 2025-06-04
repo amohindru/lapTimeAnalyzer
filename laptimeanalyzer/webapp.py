@@ -1,23 +1,37 @@
 from flask import Flask, request, render_template, redirect, url_for
 import plotly.express as px
 
-from .data import load_lap_times, compute_deltas
+from .data import compute_deltas, fetch_lap_times, fetch_circuits
 
 app = Flask(__name__)
 
-# In-memory storage of uploaded data
+# In-memory storage of fetched data
 lap_data = None
+lap_year = None
+lap_circuit = None
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    global lap_data
-    if request.method == 'POST':
-        file = request.files.get('file')
-        if file:
-            lap_data = compute_deltas(load_lap_times(file))
-            return redirect(url_for('dashboard'))
-    return render_template('index.html')
+    global lap_data, lap_year, lap_circuit
+
+    years = list(range(2018, 2024))
+    year = request.form.get('year') or request.args.get('year') or str(years[-1])
+    circuits = fetch_circuits(year)
+
+    if request.method == 'POST' and request.form.get('circuit'):
+        lap_year = year
+        lap_circuit = request.form['circuit']
+        lap_data = compute_deltas(fetch_lap_times(year, lap_circuit))
+        return redirect(url_for('dashboard'))
+
+    return render_template(
+        'index.html',
+        years=years,
+        circuits=circuits,
+        selected_year=year,
+        selected_circuit=request.form.get('circuit'),
+    )
 
 
 @app.route('/dashboard')
@@ -60,6 +74,8 @@ def dashboard():
         selected_track=track,
         time_graph=time_graph,
         delta_graph=delta_graph,
+        year=lap_year,
+        circuit_name=df['track'].iloc[0] if not df.empty else '',
     )
 
 
