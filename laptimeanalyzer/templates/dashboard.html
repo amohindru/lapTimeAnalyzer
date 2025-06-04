@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+    <title>Lap Time Dashboard</title>
+</head>
+<body>
+    <h1>Lap Time Dashboard</h1>
+    <form method="get">
+        Driver:
+        <select name="driver">
+            <option value="">All</option>
+            {% for d in drivers %}
+            <option value="{{ d }}" {% if d == selected_driver %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+        </select>
+        Team:
+        <select name="team">
+            <option value="">All</option>
+            {% for t in teams %}
+            <option value="{{ t }}" {% if t == selected_team %}selected{% endif %}>{{ t }}</option>
+            {% endfor %}
+        </select>
+        Track:
+        <select name="track">
+            <option value="">All</option>
+            {% for tr in tracks %}
+            <option value="{{ tr }}" {% if tr == selected_track %}selected{% endif %}>{{ tr }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Filter">
+    </form>
+    <div>
+        {{ time_graph|safe }}
+    </div>
+    <div>
+        {{ delta_graph|safe }}
+    </div>
+</body>
+</html>
